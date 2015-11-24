@@ -1,0 +1,3 @@
+*   * * * * root php /var/www/tasks/cron_jobs/run_every_minute.php
+*/3 * * * * root php /var/www/tasks/cron_jobs/check_imap_every_3_minutes.php
+0   * * * * root php /var/www/tasks/cron_jobs/run_every_hour.php

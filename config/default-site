@@ -1,0 +1,55 @@
+upstream phpfpm {
+    server unix:/var/run/php5-fpm.sock;
+}
+
+server {
+	listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+	server_tokens off;
+
+	root /var/www/public;
+	index index.html index.htm index.php router.php;
+	charset utf8;
+
+    client_max_body_size 8M;
+
+    if (!-e $request_filename) {
+        rewrite ^/assets/(.*)$ /assets/$1 last;
+        rewrite ^/avatars/(.*)$ /avatars/$1 last;
+        rewrite ^/wallpapers/(.*)$ /wallpapers/$1 last;
+        rewrite ^/verify-existence$ /verify.php last;
+        rewrite ^/proxy.php$ /proxy.php last;
+        rewrite ^/api/v([0-9]*)/(.*)$ /api.php?path_info=$2&api_version=$1 last;
+        rewrite ^/$ /router.php last;
+        rewrite ^(.*) /router.php?path_info=$1 last;
+    }
+
+    location = /favicon.ico {
+    	log_not_found off;
+    	access_log off;
+    }
+
+    location = /robots.txt {
+    	allow all;
+    	log_not_found off;
+    	access_log off;
+    }
+
+    # Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
+    # Keep logging the requests to parse later (or to pass to firewall utilities such as fail2ban).
+    location ~ /\. {
+    	deny all;
+    }
+
+    # Pass all PHP files onto PHP's Fast Process Manager server.
+    location ~ [^/]\.php(/|\?|$) {
+        fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+        if (!-f $document_root$fastcgi_script_name) {
+            return 404;
+        }
+        try_files $fastcgi_script_name =404;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass phpfpm;
+    }
+}
