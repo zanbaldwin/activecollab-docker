@@ -32,9 +32,7 @@ RUN apt-get install -y \
     php5-fpm \
     php5-gd \
     php5-imap \
-    php5-intl \
     php5-json \
-    php5-mcrypt \
     php5-mysqlnd
 
 # Setup the PHP-FPM daemon.
@@ -46,14 +44,8 @@ RUN chmod +x /etc/service/php5-fpm/run
 ADD config/pool-www.conf /etc/php5/fpm/pool.d/www.conf
 ADD config/php.ini /etc/php5/fpm/php.ini
 ADD config/php.ini /etc/php5/cli/php.ini
-RUN ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/cli/conf.d/15-mcrypt.ini \
- && ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/fpm/conf.d/15-mcrypt.ini \
- && ln -s /etc/php5/mods-available/imap.ini /etc/php5/cli/conf.d/20-imap.ini \
+RUN ln -s /etc/php5/mods-available/imap.ini /etc/php5/cli/conf.d/20-imap.ini \
  && ln -s /etc/php5/mods-available/imap.ini /etc/php5/fpm/conf.d/20-imap.ini
-
-
-# Install other software that will be used.
-RUN apt-get install -y wget
 
 # Install the CRON tab.
 ADD config/crontab /etc/crontab

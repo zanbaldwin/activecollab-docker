@@ -94,5 +94,8 @@ not `127.0.0.1`. To check that the domain you have chosen meets this requirement
 $ docker exec activecollab ping $DOMAIN
 ```
 
+You should also ensure that the domain does not resolve to the IP address of either the Docker daemon or one of it's
+containers, especially if you enable HTTPS. These IP addresses are usually in the form of `172.17.*`.
+
 [ac]: https://activecollab.com
 [docker]: https://www.docker.com
