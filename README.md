@@ -2,6 +2,12 @@
 
 Docker container for self-hosted activeCollab.
 
+This project builds upon the excellent [Ubuntu base image][baseimage] from the people at [Phusion][phusion], but as of
+version `1.1.0` it is recommended that you use a custom build using Ubuntu `15.04` to provide an up-to-date PHP version
+(`5.6`). Please be aware that this is not an LTS release and will not be as stable.
+
+Images of [zanderbaldwin/activecollab][hubrepo] hosted on Docker Hub since version `1.1.0` use Ubuntu `15.10`.
+
 ## Linked Containers
 
 This container links to other containers to provide MySQL and Elasticsearch functionality.
@@ -13,10 +19,21 @@ $ docker run -d --restart="always" --name="acelastica" elasticsearch:latest
 
 ## Building
 
-Super simple!
+If you wish to use the Non-LTS version, containing PHP `5.6`, create a custom build of `phusion/baseimage` (skip this
+step if you plan to use LTS with PHP `5.5`):
 
 ```bash
-docker build --no-cache --rm -t zanderbaldwin/activecollab .
+$ git clone git://github.com/phusion/baseimage-docker.git
+$ cd baseimage-docker
+$ git checkout rel-0.9.17
+# Edit "image/Dockerfile" to replace the line "FROM ubuntu:14.04" with "FROM ubuntu:15.04".
+$ make build
+```
+
+Now create the `zanderbaldwin/activecollab` build:
+
+```bash
+$ docker build --no-cache --rm -t zanderbaldwin/activecollab .
 ```
 
 ## Setting Up activeCollab
@@ -99,3 +116,6 @@ containers, especially if you enable HTTPS. These IP addresses are usually in th
 
 [ac]: https://activecollab.com
 [docker]: https://www.docker.com
+[phusion]: http://www.phusion.nl
+[baseimage]: https://github.com/phusion/baseimage-docker
+[hubrepo]: https://hub.docker.com/r/zanderbaldwin/activecollab/
