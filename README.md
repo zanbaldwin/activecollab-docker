@@ -46,11 +46,13 @@ Then add the following Nginx site configuration on the host machine:
 
 ```nginx
 server {
-    listen       80;
-    server_name  $DOMAIN;
+    listen          80;
 
-    access_log   /var/log/nginx/$DOMAIN.access.log;
-    error_log    /var/log/nginx/$DOMAIN.error.log;
+    server_name     $DOMAIN;
+    server_tokens   off;
+
+    access_log      /var/log/nginx/$DOMAIN.access.log;
+    error_log       /var/log/nginx/$DOMAIN.error.log;
 
     location / {
         proxy_pass           http://localhost:32922;
@@ -60,8 +62,27 @@ server {
         proxy_set_header     Host            $host;
         proxy_set_header     X-Real-IP       $remote_addr;
         proxy_set_header     X-Forwarded-For $proxy_add_x_forwarded_for;
+        ## If you use HTTPS, the following line *MUST* be set to pass URL rewriting verification!
+        # proxy_set_header     X-Real-Port     443;
     }
 }
+```
+
+If you wish to use HTTPS, the replace `listen 80;` with the following:
+
+```nginx
+listen                      443 ssl;
+ssl                         on;
+ssl_protocols               TLSv1 TLSv1.1 TLSv1.2;
+ssl_session_cache           builtin:1000 shared:SSL:10m;
+ssl_prefer_server_ciphers   on;
+ssl_dhparam                 /etc/ssl/certs/dhparam.pem;
+ssl_ciphers                 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:MD5:!PSK:!RC4';
+add_header                  Strict-Transport-Security max-age=63072000;
+add_header                  X-Frame-Options DENY;
+add_header                  X-Content-Type-Options nosniff;
+ssl_certificate             /etc/ssl/private/$DOMAIN.crt;
+ssl_certificate_key         /etc/ssl/private/$DOMAIN.key;
 ```
 
 ## Warning
