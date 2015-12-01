@@ -1,7 +1,8 @@
 # Use "phusion/baseimage" as base image. To make your builds reproducible, make sure you lock down to a specific
 # version, not to "latest"! To see a list of version numbers, visit:
 # https://github.com/phusion/baseimage-docker/blob/master/Changelog.md
-FROM        phusion/baseimage:0.9.17
+# NOTE: Build baseimage from submodule, it uses Ubuntu 15.04 instead of 14.04 to get the recommended PHP 5.6 packages.
+FROM        phusion/baseimage:0.9.17-15.04
 MAINTAINER  Zander Baldwin <hello@zanderbaldwin.com>
 VOLUME      /var/www
 WORKDIR     /var/www
@@ -14,7 +15,7 @@ RUN apt-get update \
  && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
 
 # Install Nginx
-RUN apt-get install -y nginx
+RUN apt-get install --no-install-recommends -y nginx
 
 # Setup the Nginx daemon.
 RUN mkdir -p /etc/service/nginx
@@ -26,7 +27,7 @@ ADD config/nginx.conf /etc/nginx/nginx.conf
 ADD config/default-site /etc/nginx/sites-available/default
 
 # Install PHP
-RUN apt-get install -y \
+RUN apt-get install --no-install-recommends -y \
     php5-cli \
     php5-curl \
     php5-fpm \
