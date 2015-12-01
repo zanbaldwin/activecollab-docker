@@ -2,7 +2,7 @@
 # version, not to "latest"! To see a list of version numbers, visit:
 # https://github.com/phusion/baseimage-docker/blob/master/Changelog.md
 # NOTE: Build baseimage from submodule, it uses Ubuntu 15.04 instead of 14.04 to get the recommended PHP 5.6 packages.
-FROM        phusion/baseimage:0.9.17-15.04
+FROM        phusion/baseimage:0.9.17
 MAINTAINER  Zander Baldwin <hello@zanderbaldwin.com>
 VOLUME      /var/www
 WORKDIR     /var/www
