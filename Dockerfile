@@ -49,7 +49,8 @@ RUN ln -s /etc/php5/mods-available/imap.ini /etc/php5/cli/conf.d/20-imap.ini \
  && ln -s /etc/php5/mods-available/imap.ini /etc/php5/fpm/conf.d/20-imap.ini
 
 # Install the CRON tab.
-ADD config/crontab /etc/crontab
+ADD config/crontab /etc/cron.d/activecollab
+RUN chmod 0644 /etc/cron.d/activecollab
 
 # Clean up APT when done.
 RUN apt-get clean \
