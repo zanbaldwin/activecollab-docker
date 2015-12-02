@@ -8,6 +8,8 @@ version `1.1.0` it is recommended that you use a custom build using Ubuntu `15.0
 
 Images of [zanderbaldwin/activecollab][hubrepo] hosted on Docker Hub since version `1.1.0` use Ubuntu `15.10`.
 
+> **TODO:** Documentation, including replacing commented-out configuration with better explanations.
+
 ## Linked Containers
 
 This container links to other containers to provide MySQL and Elasticsearch functionality.
