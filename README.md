@@ -10,6 +10,12 @@ Images of [zanderbaldwin/activecollab][hubrepo] hosted on Docker Hub since versi
 
 > **TODO:** Documentation, including replacing commented-out configuration with better explanations.
 
+## Docker Compose
+
+A Docker compose file is now provided. Run `docker-compose up -d` to run all the required containers (which assumes that you have placed the contents of the activeCollab download to the `activecollab` subdirectory).
+
+All the commands listed after this paragraph are for setting up the containers without Docker compose.
+
 ## Linked Containers
 
 This container links to other containers to provide MySQL and Elasticsearch functionality.

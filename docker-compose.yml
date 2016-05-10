@@ -1,0 +1,18 @@
+elasticsearch:
+    image: elasticsearch
+    restart: unless-stopped
+mysql:
+    image: mysql
+    restart: unless-stopped
+    environment:
+        - "MYSQL_ROOT_PASSWORD="
+activecollab:
+    build: .
+    links:
+        - elasticsearch
+        - mysql
+    restart: unless-stopped
+    volumes:
+        - "./activecollab:/var/www"
+    ports:
+        - "32922:80"
